@@ -3,7 +3,7 @@
 
 name: {{ name }}
 version: {{ version }}
-company: conda-forge
+company: jaimergp
 
 channels:
   # specifying the channel with the full URL adds two channels
@@ -21,15 +21,15 @@ license_file: ../LICENSE
 specs:
 {% if name.endswith("pypy3") %}
   - python 3.6.* *_pypy
+{% elif name.endswith("colab") %}
+  - python 3.6.*
 {% else %}
   - python 3.8.*    # [not (osx and arm64)]
   - python 3.9.*    # [osx and arm64]
 {% endif %}
-
 {% if name.startswith("Mambaforge") %}
   - mamba
 {% endif %}
   - conda {{ version.split("-")[0] }}
-
   - pip
   - bzip2
