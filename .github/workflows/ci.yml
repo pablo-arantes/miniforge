@@ -134,12 +134,17 @@ jobs:
           #   OS_NAME: "Linux"
 
           # - os: ubuntu-latest
-          #   ARCH: x86_64
-          #   TARGET_PLATFORM: linux-64
-          #   DOCKER_ARCH: amd64
-          #   DOCKERIMAGE: condaforge/linux-anvil-comp7
-          #   MINIFORGE_NAME: "Miniforge-pypy3"
+          #   ARCH: aarch64
+          #   TARGET_PLATFORM: linux-aarch64
+          #   DOCKER_ARCH: arm64v8
+          #   DOCKERIMAGE: condaforge/linux-anvil-aarch64
+          #   MINIFORGE_NAME: "Mambaforge-pypy3"
           #   OS_NAME: "Linux"
+          #   # Reduce the test matrix because the builds timeouts on emulated architectures
+          #   # The time consuming operation is an attempt a full solve of conda/mamba/boa
+          #   # for as a compatibility
+          #   # xref https://github.com/conda-forge/miniforge/pull/361
+          #   TEST_IMAGE_NAMES: "ubuntu:22.04"
 
           # - os: ubuntu-latest
           #   ARCH: x86_64
@@ -162,14 +167,27 @@ jobs:
           #   TARGET_PLATFORM: linux-ppc64le
           #   DOCKER_ARCH: ppc64le
           #   DOCKERIMAGE: condaforge/linux-anvil-ppc64le
+          #   MINIFORGE_NAME: "Miniforge-pypy3"
+          #   OS_NAME: "Linux"
+
+          # - os: ubuntu-latest
+          #   ARCH: ppc64le
+          #   TARGET_PLATFORM: linux-ppc64le
+          #   DOCKER_ARCH: ppc64le
+          #   DOCKERIMAGE: condaforge/linux-anvil-ppc64le
           #   MINIFORGE_NAME: "Mambaforge-pypy3"
           #   OS_NAME: "Linux"
+          #   # Reduce the test matrix because the builds timeouts on emulated architectures
+          #   # The time consuming operation is an attempt a full solve of conda/mamba/boa
+          #   # for as a compatibility
+          #   # xref https://github.com/conda-forge/miniforge/pull/361
+          #   TEST_IMAGE_NAMES: "centos:7"
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - uses: conda-incubator/setup-miniconda@35d1405e78aa3f784fe3ce9a2eb378d5eeb62169
+    - uses: conda-incubator/setup-miniconda@v2.2.0
       with:
         miniconda-version: "latest"
       if: contains(matrix.OS_NAME, 'Windows')
@@ -182,6 +200,7 @@ jobs:
         DOCKERIMAGE: ${{ matrix.DOCKERIMAGE }}
         DOCKER_ARCH: ${{ matrix.DOCKER_ARCH }}
         TARGET_PLATFORM: ${{ matrix.TARGET_PLATFORM }}
+        TEST_IMAGE_NAMES: ${{ matrix.TEST_IMAGE_NAMES }}
       run: |
         if [[ "$GITHUB_REF" == refs/tags/* ]]; then
           export MINIFORGE_VERSION=${GITHUB_REF##*/};
