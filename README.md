@@ -18,7 +18,7 @@ Miniforge installers are available here: https://github.com/conda-forge/miniforg
 
 #### Miniforge3
 
-Latest installers with Python 3.9 `(*)` in the base environment:
+Latest installers with Python 3.10 `(*)` in the base environment:
 
 | OS      | Architecture          | Download  |
 | --------|-----------------------|-----------|
@@ -42,7 +42,7 @@ The versions listed as "System: 32-bit" are not compatible with the installers o
 
 #### Miniforge-pypy3
 
-Latest installers with PyPy 3.7 in the base environment:
+Latest installers with PyPy 3.9 in the base environment:
 
 | OS      | Architecture          | Download  |
 | --------|-----------------------|-----------|
@@ -68,7 +68,7 @@ Latest installers with Mamba in the base environment:
 
 #### Mambaforge-pypy3
 
-Latest installers with Mamba and PyPy 3.7 in the base environment:
+Latest installers with Mamba and PyPy in the base environment:
 
 | OS      | Architecture          | Download  |
 | --------|-----------------------|-----------|
@@ -155,15 +155,37 @@ For Linux, any architecture, use the following command
 
     wget -O Miniforge3.sh "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-$(uname)-$(uname -m).sh"
 
+When you want to use `Mambaforge`, you should replace Miniforge into Mamabaforge:
+
+    wget -O Mambaforge.sh  "https://github.com/conda-forge/miniforge/releases/latest/download/Mambaforge-$(uname)-$(uname -m).sh"
+
+
 For MacOSX, any architecture, use the following command
 
     curl -fsSLo Miniforge3.sh "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-MacOSX-$(uname -m).sh"
 
 This will download the appropriate installer for the present architecture with
-the filename ``Miniforge3.sh``. Run the shell script with the command in batch
+the filename ``Miniforge3.sh`` (or ``Mambaforge.sh``). Run the shell script with the command in batch
 mode with the `-b` flash:
 
-    bash Miniforge3.sh -b
+    bash Miniforge3.sh -b -p "${HOME}/conda"
+
+`-p` is prefix option. A directory wil be createrd on `"${HOME}/conda"`.
+
+Then you should create the path to conda and activate conda. 
+Run this command:
+
+    source "${HOME}/conda/etc/profile.d/conda.sh"
+
+Finally, you can run the command to activate the base environment 
+
+    conda activate
+
+If you downloaded the Mambaforge installer, you should also run the following command after `source "${HOME}/conda/etc/profile.d/conda.sh`:
+
+    source "${HOME}/conda/etc/profile.d/mamba.sh"
+
+
 
 ### Homebrew
 
@@ -190,7 +212,7 @@ After construction on the CI, the installer is tested against a range of distrib
 - Ubuntu 16.04 ([LTS](https://ubuntu.com/about/release-cycle))
 - Ubuntu 18.04 ([LTS](https://ubuntu.com/about/release-cycle))
 - Ubuntu 20.04 ([LTS](https://ubuntu.com/about/release-cycle))
-- Ubuntu 21.10 (Latest non-LTS version)
+- Ubuntu 22.04 (Latest release -- also happens to be LTS)
 
 ## Local usage
 
@@ -214,7 +236,7 @@ To release a new version of Miniforge:
     1. One installer with the version name
     2. One installer without the version name
     3. The SHA256
-  - At the time of writing, the is a sum of 60 artifacts, and with the two sources, we expect a grand total of 62 artifacts.
+  - At the time of writing, the is a sum of 72 artifacts, and with the two sources, we expect a grand total of 74 artifacts.
 - Mark the pre-release as a release
 
 NOTE: using a pre-release is important to make sure the latest links work.

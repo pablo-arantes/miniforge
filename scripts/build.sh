@@ -12,16 +12,17 @@ cd "${CONSTRUCT_ROOT}"
 # Constructor should be latest for non-native building
 # See https://github.com/conda/constructor
 echo "***** Install constructor *****"
-conda install -y "constructor>=3.3.1" jinja2 curl libarchive -c conda-forge --override-channels
-
+conda install --yes \
+    --channel conda-forge --override-channels \
+    jinja2 curl libarchive \
+    "constructor>=3.3.1"
 if [[ "$(uname)" == "Darwin" ]]; then
-    conda install -y coreutils -c conda-forge --override-channels
+    conda install --yes coreutils --channel conda-forge --override-channels
 fi
 # shellcheck disable=SC2154
 if [[ "${TARGET_PLATFORM}" == win-* ]]; then
-    conda install -y "nsis=3.01" -c conda-forge --override-channels
+    conda install --yes "nsis=3.01" --channel conda-forge --override-channels
 fi
-# pip install git+git://github.com/conda/constructor@3.3.1#egg=constructor --force --no-deps
 conda list
 
 echo "***** Make temp directory *****"
@@ -38,11 +39,12 @@ cp LICENSE "${TEMP_DIR}/"
 ls -al "${TEMP_DIR}"
 
 if [[ "${TARGET_PLATFORM}" != win-* ]]; then
-    MICROMAMBA_VERSION=0.24.0
+    MICROMAMBA_VERSION=1.0.0
+    MICROMAMBA_BUILD=1
     mkdir "${TEMP_DIR}/micromamba"
     pushd "${TEMP_DIR}/micromamba"
-    curl -L -O "https://anaconda.org/conda-forge/micromamba/${MICROMAMBA_VERSION}/download/${TARGET_PLATFORM}/micromamba-${MICROMAMBA_VERSION}-0.tar.bz2"
-    bsdtar -xf "micromamba-${MICROMAMBA_VERSION}-0.tar.bz2"
+    curl -L -O "https://anaconda.org/conda-forge/micromamba/${MICROMAMBA_VERSION}/download/${TARGET_PLATFORM}/micromamba-${MICROMAMBA_VERSION}-${MICROMAMBA_BUILD}.tar.bz2"
+    bsdtar -xf "micromamba-${MICROMAMBA_VERSION}-${MICROMAMBA_BUILD}.tar.bz2"
     if [[ "${TARGET_PLATFORM}" == win-* ]]; then
       MICROMAMBA_FILE="${PWD}/Library/bin/micromamba.exe"
     else
