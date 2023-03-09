@@ -23,7 +23,7 @@ specs:
 {% if name.endswith("pypy3") %}
   - python 3.9.* *_pypy
 {% elif name.endswith("colab") %}
-  - python 3.8.*
+  - python 3.9.*
 {% else %}
   - python 3.10.*
 {% endif %}
